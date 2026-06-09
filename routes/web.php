@@ -13,6 +13,8 @@ use App\Http\Controllers\Customer;
 use App\Http\Controllers\PublicPageController;
 
         Route::get('/', function () {
+
+        dd(auth()->check());
             if (auth()->check()) {
                 if (auth()->user()->hasRole('admin')) {
                     return redirect()->route('admin.dashboard');
@@ -57,6 +59,8 @@ use App\Http\Controllers\PublicPageController;
 
     // ─── ADMIN PANEL CORES DIRECTIVES ────────────────────────────────
     Route::redirect('/admin', '/admin/dashboard'); // Clean redirect helper
+        Route::redirect('/dashboard', '/admin/dashboard'); // Clean redirect helper
+
     Route::middleware(['auth', 'role:admin'])
         ->prefix('admin')
         ->name('admin.')
