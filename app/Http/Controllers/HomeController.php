@@ -2,8 +2,16 @@
 
 namespace App\Http\Controllers;
 
+
 class HomeController extends Controller
 {
-    public function index() { return view('public.home'); }
-    public function contact() { return view('public.contact'); }
+    public function index()
+    {
+         return view('public.home'); 
+    }
+
+    public function contact()
+    {
+        return view('public.contact'); // Simple support layout placeholder
+    }
 }

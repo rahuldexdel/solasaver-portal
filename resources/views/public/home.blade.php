@@ -16,44 +16,7 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased">
 
-    <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-4 flex items-center justify-between">
-            <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <span class="text-2xl font-bold tracking-tight text-slate-900">
-                    <span class="text-emerald-500">Sola</span>Saver
-                </span>
-            </a>
-
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
-                <a href="{{ route('home') }}" class="text-emerald-600 border-b-2 border-emerald-500 pb-1">Home</a>
-                <a href="#" class="hover:text-slate-900 transition">Why Choose Us</a>
-                <a href="{{ route('compatibility') }}" class="hover:text-slate-900 transition">System Compatibility</a>
-                <a href="{{ route('shop') }}" class="hover:text-slate-900 transition">Order and Product Questions</a>
-                <a href="{{ route('contact') }}" class="hover:text-slate-900 transition">Contact Us</a>
-            </nav>
-
-            <div class="flex items-center gap-4">
-         @auth
-    @if(auth()->user()->hasRole('admin'))
-        <a href="{{ route('admin.dashboard') }}" class="text-sm font-semibold text-gray-900 hover:text-gray-700">
-            Go to Admin Portal →
-        </a>
-    @elseif(auth()->user()->hasRole('installer'))
-        <a href="{{ route('installer.dashboard') }}" class="text-sm font-semibold text-gray-900 hover:text-gray-700">
-            Go to Deployment Center →
-        </a>
-    @else
-        <a href="{{ route('customer.dashboard') }}" class="text-sm font-semibold text-gray-900 hover:text-gray-700">
-            Go to Customer Portal →
-        </a>
-    @endif
-@endauth
-                <a href="tel:+012482482481" class="hidden lg:flex items-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-sm">
-                    Call for Help +01 248 248 2481 →
-                </a>
-            </div>
-        </div>
-    </header>
+   @include('layouts.public-header')
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div class="lg:col-span-7 space-y-6">

@@ -9,23 +9,30 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function index()
-    {
-       $orders = Order::with('user')->orderBy('created_at', 'desc')->get();
-        
-        return view('admin.orders.index', compact('orders'));
-    }
+        public function index()
+        {
+        $orders = Order::with('user')->orderBy('created_at', 'desc')->get();
+            
+            return view('admin.orders.index', compact('orders'));
+        }
 
-    public function show(Order $order)
-    {
-        $order->load(['user', 'items.product', 'installation']);
-        return view('admin.orders.show', compact('order'));
-    }
+        public function show(Order $order)
+        {
+            // Load items inside the order
+            $order->load(['user', 'orderItems.product']);
+            return view('admin.orders.show', compact('order'));
+        }
 
-    public function updateStatus(Request $request, Order $order)
-    {
-        $request->validate(['status' => 'required|in:pending,confirmed,shipped,delivered,cancelled']);
-        $order->update(['status' => $request->status]);
-        return back()->with('success', 'Order lifecycle stage shifted.');
-    }
+        public function updateStatus(Request $request, Order $order)
+        {
+            $request->validate([
+                'status' => 'required|in:pending,processing,completed,cancelled'
+            ]);
+
+            $order->update([
+                'status' => $request->status
+            ]);
+
+            return back()->with('success', 'Order state tracking updated successfully.');
+        }
 }

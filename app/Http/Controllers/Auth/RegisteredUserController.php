@@ -28,24 +28,38 @@ class RegisteredUserController extends Controller
      *
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        public function store(Request $request): RedirectResponse
+        {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+            // 1. Create the user record
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        event(new Registered($user));
+            // 2. Assign the 'customer' role automatically upon registration
+            $user->assignRole('customer');
 
-        Auth::login($user);
+            event(new Registered($user));
 
-        return redirect(route('dashboard', absolute: false));
-    }
+            Auth::login($user);
+
+            // 3. Dynamically redirect based on the role
+            if ($user->hasRole('admin')) {
+                return redirect()->route('admin.dashboard');
+            }
+            
+            if ($user->hasRole('installer')) {
+                return redirect()->route('installer.dashboard');
+            }
+
+            // Default fallback for newly registered customers
+            return redirect()->route('customer.dashboard');
+        }
 }

@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
-                @foreach($users as $user)
+            @foreach($users as $user)
                     <tr class="hover:bg-gray-50/50 transition-all">
                         <td class="px-6 py-4">
                             <div class="font-semibold text-gray-900">{{ $user->name }}</div>
@@ -24,14 +24,14 @@
                             {{ $user->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-6 py-4">
-                            <span class="px-2.5 py-1 text-xs font-bold uppercase rounded tracking-wider bg-gray-100 text-gray-800">
-                                {{ $user->role ?? 'Customer' }}
+                            <span class="px-2.5 py-1 text-xs font-bold uppercase rounded tracking-wider {{ $user->hasRole('admin') ? 'bg-red-100 text-red-800' : ($user->hasRole('installer') ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }}">
+                                {{ $user->getRoleNames()->first() ?? 'Customer' }}
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <button class="text-gray-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg text-xs font-medium transition-all">
+                            <a href="{{ route('admin.users.show', $user->id) }}" class="text-gray-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg text-xs font-medium inline-block">
                                 Adjust Rights
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

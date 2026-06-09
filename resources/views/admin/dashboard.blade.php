@@ -37,8 +37,24 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 class="text-base font-bold text-gray-900 mb-1">Welcome Back, Operational Director!</h2>
-        <p class="text-gray-500 text-sm leading-relaxed">The solar infrastructure system framework is live. Use the new slate-gray left sidebar to adjust system assets, process hardware fulfillment pipelines, or control technician assignments.</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 class="text-base font-bold text-gray-900 mb-1">Welcome Back, Operational Director!</h2>
+            <p class="text-gray-500 text-sm leading-relaxed">The solar infrastructure system framework is live. Use the new slate-gray left sidebar to adjust system assets, process hardware fulfillment pipelines, or control technician assignments.</p>
+        </div>
+
+        <!-- <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between">
+            <div>
+                <h2 class="text-base font-bold text-gray-900 mb-1">Account & Security</h2>
+                <p class="text-gray-500 text-sm leading-relaxed">Manage your personal operator specifications, alter database access passwords, or terminate sessions.</p>
+            </div>
+            <div class="mt-4">
+                <a href="{{ route('profile.edit') }}" class="w-full text-center inline-block bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium py-2 px-4 rounded-lg transition shadow-sm">
+                    Edit Profile Parameters
+                </a>
+            </div>
+        </div> -->
+
     </div>
 </x-app-layout>

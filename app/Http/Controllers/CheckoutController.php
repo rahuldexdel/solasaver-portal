@@ -1,11 +1,10 @@
 <?php
 
-// app/Http/Controllers/CheckoutController.php
 namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Installation;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,58 +13,72 @@ class CheckoutController extends Controller
     public function index()
     {
         $cart = session()->get('cart', []);
-        if (empty($cart)) return redirect()->route('shop')->with('error', 'Your cart is empty.');
-        return view('public.checkout', compact('cart'));
+        if (empty($cart)) {
+            return redirect()->route('shop')->with('error', 'No hardware queued for fulfillment validation.');
+        }
+
+        $total = array_reduce($cart, function($carry, $item) {
+            return $carry + ($item['price'] * $item['quantity']);
+        }, 0);
+
+        return view('public.shop.checkout', compact('cart', 'total'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'phone' => 'required|string',
-            'shipping_address' => 'required|string',
-            'require_installation' => 'nullable|boolean'
-        ]);
-
         $cart = session()->get('cart', []);
         if (empty($cart)) return redirect()->route('shop');
 
-        $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+        $request->validate([
+            'shipping_address' => 'required|string|max:500',
+            'contact_phone' => 'required|string|max:30'
+        ]);
 
-        DB::transaction(function () use ($request, $cart, $total, &$order) {
-            $order = Order::create([
+        $total = array_reduce($cart, function($carry, $item) {
+            return $carry + ($item['price'] * $item['quantity']);
+        }, 0);
+
+        // Process isolation tracking transactional scope safe write blocks
+        DB::transaction(function () use ($request, $cart, $total) {
+          $order = Order::create([
                 'user_id' => auth()->id(),
-                'status' => 'pending',
                 'total_amount' => $total,
-                'phone' => $request->phone,
+                'status' => 'pending',
                 'shipping_address' => $request->shipping_address,
-                'payment_status' => 'unpaid'
+                'phone' => $request->contact_phone
             ]);
 
-            foreach ($cart as $productId => $item) {
+            \App\Models\Installation::create([
+                'order_id'    => $order->id,
+                'customer_id' => auth()->id(),
+                'status'      => 'pending'
+            ]);
+            foreach ($cart as $id => $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $productId,
+                    'product_id' => $id,
                     'quantity' => $item['quantity'],
                     'unit_price' => $item['price']
                 ]);
-            }
 
-            // Optional structural layout entry generation for installations
-            if ($request->require_installation) {
-                Installation::create([
-                    'order_id' => $order->id,
-                    'customer_id' => auth()->id(),
-                    'status' => 'pending'
-                ]);
+                // Reduce available inventory allocation
+                Product::where('id', $id)->decrement('stock', $item['quantity']);
             }
         });
 
+        // Clear active pipeline queue state
         session()->forget('cart');
-        return redirect()->route('checkout.success', $order->id)->with('success', 'Order tracking initialized.');
+
+        // Target the standard generated entry order success identifier view
+        $latestOrder = Order::where('user_id', auth()->id())->latest()->first();
+        return redirect()->route('checkout.success', $latestOrder->id);
     }
 
     public function success(Order $order)
     {
-        return view('public.order-success', compact('order'));
+        // Security gate validation barrier check context
+        if ($order->user_id !== auth()->id()) abort(403);
+
+        return view('public.shop.success', compact('order'));
     }
 }

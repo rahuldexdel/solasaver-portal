@@ -1,44 +1,56 @@
 <x-app-layout>
     <x-slot name="header">
-        <h1 class="font-bold text-lg text-gray-900 tracking-tight">Site Deployment Assignments</h1>
+        <h1 class="font-bold text-lg text-gray-900 tracking-tight">Deployments & Installations</h1>
     </x-slot>
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                <tr>
-                    <th class="px-6 py-3.5 text-left">Deployment Token</th>
-                    <th class="px-6 py-3.5 text-left">Customer</th>
-                    <th class="px-6 py-3.5 text-left">Target Window Date</th>
-                    <th class="px-6 py-3.5 text-left">Deployment Status</th>
-                    <th class="px-6 py-3.5 text-right">Management</th>
+        <div class="p-6 border-b border-gray-100">
+            <h2 class="text-base font-bold text-gray-900">Deployment Schedule Matrix</h2>
+            <p class="text-gray-500 text-xs mt-0.5">Assign certified hardware technicians to pending customer orders.</p>
+        </div>
+
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-50 text-gray-400 font-mono text-[10px] uppercase border-b border-gray-100">
+                    <th class="px-6 py-3">Job ID</th>
+                    <th class="px-6 py-3">Order Ref</th>
+                    <th class="px-6 py-3">Customer</th>
+                    <th class="px-6 py-3">Assigned Installer</th>
+                    <th class="px-6 py-3">Scheduled Date</th>
+                    <th class="px-6 py-3">Status</th>
+                    <th class="px-6 py-3 text-right">Actions</th>
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
+            <tbody class="divide-y divide-gray-100 text-sm">
                 @forelse($installations as $job)
-                    <tr class="hover:bg-gray-50/50 transition-all">
-                        <td class="px-6 py-4 font-mono text-gray-900 font-semibold">JOB-{{ $job->id }}</td>
+                    <tr class="hover:bg-gray-50/50 transition">
+                        <td class="px-6 py-4 font-mono text-gray-500">#JOB-{{ $job->id }}</td>
+                        <td class="px-6 py-4 font-mono font-bold text-gray-900">#SLS-{{ $job->order_id }}</td>
+                        <td class="px-6 py-4 font-medium text-gray-900">{{ $job->customer->name ?? 'N/A' }}</td>
                         <td class="px-6 py-4">
-                            <div class="font-medium text-gray-900">{{ $job->order->user->name ?? 'N/A' }}</div>
+                            @if($job->installer)
+                                <div class="font-semibold text-gray-900">{{ $job->installer->name }}</div>
+                            @else
+                                <span class="text-xs text-rose-600 bg-rose-50 px-2 py-0.5 rounded font-medium animate-pulse">Unassigned</span>
+                            @endif
                         </td>
-                        <td class="px-6 py-4 text-gray-500 text-xs">
-                            {{ $job->scheduled_at ? $job->scheduled_at->format('M d, Y') : 'Unassigned' }}
+                        <td class="px-6 py-4 text-gray-600">
+                            {{ $job->scheduled_date ? $job->scheduled_date->format('M d, Y') : 'Pending Schedule' }}
                         </td>
                         <td class="px-6 py-4">
-                            <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-gray-100 text-gray-700 uppercase tracking-wider">
+                            <span class="px-2 py-0.5 text-xs font-bold uppercase rounded-full tracking-wider {{ $job->status === 'pending' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800' }}">
                                 {{ $job->status }}
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <a href="#" class="text-gray-600 bg-gray-100 hover:bg-gray-200 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all">Assign Specialist</a>
+                            <a href="{{ route('admin.installations.show', $job->id) }}" class="text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition">
+                                Manage Dispatch →
+                            </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-12 text-center text-gray-400">
-                            <span class="block text-2xl mb-2">🛠️</span>
-                            <p class="text-sm font-medium text-gray-500">No installation tasks currently scheduled.</p>
-                        </td>
+                        <td colspan="7" class="px-6 py-12 text-center text-gray-400">No hardware deployment records found.</td>
                     </tr>
                 @endforelse
             </tbody>

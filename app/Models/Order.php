@@ -26,4 +26,10 @@ class Order extends Model
     {
         return $this->hasOne(Installation::class);
     }
+
+    public function orderItems()
+    {
+        
+        return $this->hasMany(OrderItem::class); 
+    }
 }
