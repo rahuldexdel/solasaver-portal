@@ -44,6 +44,9 @@ use App\Http\Controllers\PublicPageController;
 
         Route::get('/where-to-buy', [PublicPageController::class, 'whereToBuy'])->name('public.where-to-buy');
         Route::get('/find-electrician', [PublicPageController::class, 'findElectrician'])->name('public.find-electrician');
+        Route::get('/why-choose-us', [PublicPageController::class, 'whychooseus'])->name('public.why-choose-us');
+         Route::get('/faq', [PublicPageController::class, 'faq'])->name('public.faq');
+
 
 
     // ─── CHECKOUT SYSTEM (Authentication Required) ───────────────────

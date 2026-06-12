@@ -1,77 +1,140 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>System Compatibility Matrix - SolaSaver</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style> body { font-family: 'Inter', sans-serif; } </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Compatibility</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased">
+<body>
 
-    <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-4 flex items-center justify-between">
-            <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <span class="text-2xl font-bold tracking-tight text-slate-900"><span class="text-emerald-500">Sola</span>Saver</span>
-            </a>
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
-                <a href="{{ route('home') }}" class="hover:text-slate-900 transition">Home</a>
-                <a href="#" class="hover:text-slate-900 transition">Why Choose Us</a>
-                <a href="{{ route('compatibility') }}" class="text-emerald-600 border-b-2 border-emerald-500 pb-1">System Compatibility</a>
-                <a href="{{ route('shop') }}" class="hover:text-slate-900 transition">Order and Product Questions</a>
-                <a href="{{ route('contact') }}" class="hover:text-slate-900 transition">Contact Us</a>
-            </nav>
-            <div class="flex items-center gap-4">
-                @auth
-                    <form method="POST" action="{{ route('logout') }}" class="inline">@csrf
-                        <button type="submit" class="text-xs font-medium text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition">Log Out</button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900 transition">Log In</a>
-                    <a href="{{ route('register') }}" class="text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 px-4 py-2 rounded-xl transition">Register</a>
-                @endauth
-            </div>
-        </div>
+    <header class="sticky-header px-6 pb-3 pb-lg-0">
+        @include('layouts.public-header')
     </header>
 
-    <main class="max-w-3xl mx-auto px-4 py-16">
-        <div class="text-center mb-12">
-            <h1 class="text-4xl font-extrabold text-slate-950 tracking-tight">Is SolaSaver Compatible With Your System?</h1>
-            <p class="text-slate-500 mt-2">Enter your inverter brand model parameter metrics to evaluate deployment readiness setup profiles.</p>
+    <section class="page-hero bg-light py-3">
+        <div class="container mt-lg-5 pt-lg-5">
+            <h1 class="fw-bold my-0 text-center text-white pt-lg-5 mt-lg-5">System Compatibility</h1>
+            <p class="text-white text-center mt-3 p-xl">A smarter, simpler way to use more of your own solar power without complexity, high costs, or ongoing maintenance.</p>
         </div>
+    </section>
 
-        @if(session('checked'))
-            <div class="mb-8 p-6 rounded-2xl border transition-all {{ session('compatible') ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900' }}">
-                <div class="flex items-center gap-3">
-                    <span class="text-3xl">{{ session('compatible') ? '✅' : '❌' }}</span>
-                    <div>
-                        <h3 class="font-bold text-lg">{{ session('compatible') ? 'System Fully Supported!' : 'Incompatible Setup Profile' }}</h3>
-                        <p class="text-sm opacity-90 mt-0.5">{{ session('message') }}</p>
+    <section class="workhome bg-white py-5">
+        <div class="container pt-5 my-lg-5">
+            <div class="row align-items-center">
+                <div class="col-lg-5 col-12 img-bol pe-lg-5">
+                    <img src="{{ asset('img/Work home left image.png') }}" class="w-100" alt="hsw-right-img">
+                </div>
+                <div class="col-lg-7 col-12 text-col mt-2 mt-md-3 mt-lg-0 ps-lg-3 pt-lg-0 pt-3 order-lg-1 order-2">
+                    <div class="pe-lg-5">
+                        <h2 class="fw-bold my-0">Will <span class="htext">SolaSaver</span> Work In My Home?</h2>
+                        <div class="notebox my-4 p-4 rounded-4">
+                            <p class="p-xl mb-2 fw-medium">Answer a few simple questions to see if SolaSaver may suit your home.</p>
+                            <p class="p-xl mb-0 fw-medium text-uppercase">No personal details are required.</p>
+                        </div>
+                        <ul class="p-xl ps-4 mb-4">
+                            <li>Whether you already have rooftop solar</li>
+                            <li>Whether you export excess solar during the day</li>
+                            <li>Whether you have suitable electrical loads (eg hot water or a pool pump)</li>
+                            <li>Whether your home is likely to benefit from solar diversion</li>
+                            <li>What the next step is if your home looks suitable</li>
+                        </ul>
+                        <a href="#" class="cbtn">Check My Home <i class="fa-solid fa-arrow-right ms-1"></i></a>
                     </div>
                 </div>
             </div>
-        @endif
-
-        <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-xl">
-            <form action="{{ route('compatibility.check') }}" method="POST" class="space-y-6">
-                @csrf
-                <div>
-                    <label for="inverter_brand" class="block text-sm font-medium text-slate-700 mb-2">Solar Inverter Brand Name</label>
-                    <input type="text" name="inverter_brand" id="inverter_brand" required placeholder="e.g., Fronius, SMA, SolarEdge, Enphase" class="w-full rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm placeholder:text-slate-300">
-                    <span class="text-xs text-slate-400 mt-2 block font-medium">Tip: Try entering 'Fronius' or 'Enphase' to see a successful match simulation.</span>
-                    @error('inverter_brand')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition shadow-md">
-                    Execute Matrix Diagnostics →
-                </button>
-            </form>
         </div>
-    </main>
+    </section>
+
+    <section class="suitable-sola bg-white py-5">
+        <div class="container pt-5 my-lg-5">
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <div class="resultbox bg-white">
+                        <div class="innerbox">
+                            <h3 class="fw-bold my-0"> 
+                                <img src="{{ asset('img/check-icon.svg') }}" alt="Check Icon"> Your Home Appears Suitable for <span class="htext">SolaSaver</span>
+                            </h3>
+                            <p class="mt-3 mb-0 fw-medium">This check provides a general indication only. Final compatibility and installation requirements must be confirmed by a licensed electrician.</p>
+                        </div>
+                        <div class="innerbox2">
+                            <p class="fw-medium">Based on your answers, SolaSaver should work with a setup like yours. A licensed electrician can confirm compatibility and install the unit.</p>
+                            <div class="btn-group d-flex flex-column flex-sm-row gap-3 mt-4">
+                                <a href="{{ route('public.find-electrician') }}" class="cbtn">Find a SolaSaver Registered Installer <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                                <a href="#" class="cbtn">Send SolaSaver Info to Your Electrician <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <footer class="footer">
+            <div class="container py-4">
+                <div class="row pt-5 pb-5">
+                    <div class="col-lg-4 col-md-4 col-12 order-2 order-md-1 my-5 my-md-0">
+                        <h5 class="fw-medium secondary-color">Contact Us</h5>
+                        <hr style="opacity: 1; background-color: var(--secondary-color); width: 40px;">
+                        <ul class="list-unstyled m-0 p-0">
+                            <li><p><a href="tel:+012482482481"> <i class="fa-solid fa-phone me-2 primary-color"></i>+01 248 248 2481</a></p></li>
+                            <li><p><a href="mailto:sales@solasaver.com"> <i class="fa-solid fa-envelope me-2 primary-color"></i>sales@solasaver.com</a></p></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-12 d-flex justify-content-center align-items-center order-1 order-md-2">
+                        <a href="{{ route('home') }}">
+                            <img src="{{ asset('img/SolaSaver Logo.svg') }}" alt="footer-logo">
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-12 width-fit-content ms-lg-auto order-3">
+                        <h5 class="fw-medium secondary-color">Useful Links</h5>
+                        <hr style="opacity: 1; background-color: var(--secondary-color); width: 40px;">
+                        <ul class="list-unstyled m-0 p-0">
+                            <li><p><a href="#"> <i class="fa-solid fa-angle-right me-2 primary-color"></i>About Us</a></p></li>
+                            <li><p><a href="#"> <i class="fa-solid fa-angle-right me-2 primary-color"></i>Terms</a></p></li>
+                            <li><p><a href="#"> <i class="fa-solid fa-angle-right me-2 primary-color"></i>Privacy</a></p></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="newsletter bg-color-secondary py-4 px-3 px-md-4 px-lg-5 rounded-4">
+                    <div class="row align-items-center py-1">
+                        <div class="col-lg-6 col-md-5 col-12">
+                            <h5 class="fw-medium pe-lg-5 pe-md-3 pe-0 m-0 text-white text-center text-md-start">Join the SolaSaver mailing list for updates and product news</h5>
+                        </div>
+                        <div class="col-lg-6 col-md-7 col-12 mt-4 mt-md-0">
+                            <form class="newsletter-form">
+                                <div class="input-group">
+                                    <input type="email" class="form-control form-control-lg" placeholder="Your Email Address" aria-label="Your Email Address" required>
+                                    <button class="cbtn hover-text-white" type="submit">Subscribe</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row position-relative mt-5">
+                    <div class="col-12">
+                        <div class="socialbox width-fit-content mx-auto">
+                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <section class="copyright bg-color-primary text-white text-center py-2">
+            <div class="container">
+                <p class="m-0 p-md">&copy; 2026 <a href="{{ route('home') }}" class="text-white">SolaSaver</a>. All Rights Reserved.</p>
+            </div>
+        </section>
+    </section>  
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

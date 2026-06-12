@@ -1,0 +1,182 @@
+/*=======================================================================================================================================*/
+@media (min-width: 1201px) and (max-width: 1440px) {
+    .usemore .iconbox {
+        margin: 0px;
+    }
+}
+/*=======================================================================================================================================*/
+@media (min-width: 1200px) and (max-width: 1380px) {
+    .main-header .sitelogo {
+        width: 90px !important;
+    }
+    .main-header nav.navbar {
+        padding-right: 0.5rem !important;
+        padding-left: 0.5rem !important;
+    }
+    .main-header nav.navbar .navbar-nav {
+        gap: 10px !important;
+    }
+    .main-header nav.navbar .navbar-nav .nav-link {
+        font-size: 14.5px !important;
+    }
+}
+/*=======================================================================================================================================*/
+@media (min-width: 992px) and (max-width: 1200px) {
+    .top-header .left-info {
+        width: 45%;
+    }
+    .top-header .center-info {
+        width: 35%;
+    }
+    .top-header .right-info {
+        width: 20%;
+    }
+    .main-header .sitelogo {
+        width: 100px;
+    }
+    header.sticky-header {
+        padding-bottom: 16px !important;
+    }
+    header .navbar .navbar-nav {
+        gap: 5px !important;
+    }
+    .usemore .text-col {
+        padding-right: 12px !important;
+        width: 100%;
+    }
+    .usemore .box-col {
+        width: 50% !important;
+        height: 350px;
+    }
+    .page-hero {
+        height: auto !important;
+        min-height: 450px !important;
+    }
+    .faq-sec .custom-faq .accordion-item .accordion-header .accordion-button {
+        padding: 25px 30px 25px 80px;
+    }
+}
+/*=======================================================================================================================================*/
+@media screen and (min-width: 1201px) {
+    .usemore .box-col:nth-child(2), .usemore .box-col:nth-child(3) {
+        margin-top: 0px !important;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .sticky-header {
+        margin-bottom: 0px !important;
+        background-color: #071e0d;
+    } 
+}
+/*=======================================================================================================================================*/
+@media screen and (max-width: 991px) {
+    .hsw .img-bol img {
+        border-radius: 20px;
+    }
+}
+/*=======================================================================================================================================*/
+@media (min-width: 768px) and (max-width: 991px) {
+    .main-header .sitelogo {
+        width: 80px;
+    }
+    .usemore .iconbox {
+        padding: 0 35px 75px 35px;
+        margin: 0 10px;
+    }
+    .usemore .box-col {
+        height: 400px;
+    }
+    .page-hero {
+        height: auto !important;
+        min-height: 350px !important;
+    }
+    .buy-solar .imgbox {
+        padding: 40px 40px 30px 40px !important;
+    }
+    .buy-solar .imgbox p {
+        width: 100%;
+        margin: 20px 0 0 !important;
+    }
+    .suitable-sola .resultbox .innerbox {
+        padding: 40px 50px 40px 50px !important;
+    }
+    .suitable-sola .resultbox .innerbox2 {
+        padding: 40px 40px 20px 40px;
+    }
+    .faq-sec .custom-faq .accordion-item .accordion-header .accordion-button {
+        padding: 22px 30px 22px 80px;
+    }
+    .faq-sec .custom-faq .accordion-item .accordion-header i {
+        height: 26px;
+        width: 26px;
+        font-size: 16px;
+    }
+    .faq-sec .custom-faq .accordion-item .accordion-header .accordion-button::after {
+        width: 28px;
+        height: 28px;
+    }
+}
+/*=======================================================================================================================================*/
+@media screen and (max-width: 767px) {
+    .main-header .sitelogo {
+        width: 70px !important;
+    }
+    .cbtn {
+        padding: 12px 26px;
+    }
+    .usemore .iconbox {
+        padding: 0 30px 60px 30px;
+        margin: 0px;
+    }
+    .usemore .box-col {
+        height: auto !important;
+    }
+    .footer .row:has(.socialbox)::before,
+    .footer .row:has(.socialbox)::after {
+        display: none !important;
+    }
+    .newsletter-form .cbtn {
+        width: 100%;
+        margin: 10px 0 0 !important;
+    }
+    .page-hero {
+        height: auto !important;
+        min-height: 300px !important;
+    }
+    .buy-solar .imgbox {
+        padding: 30px 30px 25px 30px !important;
+    }
+    .buy-solar .imgbox p {
+        width: 100%;
+        margin: 20px 0 0 !important;
+    }
+    .suitable-sola .resultbox .innerbox {
+        padding: 40px 40px 40px 40px !important;
+    }
+    .suitable-sola .resultbox .innerbox2 {
+        padding: 30px 30px 10px 30px;
+    }
+    .instal-form form.installer-form input, .instal-form form.installer-form select {
+        font-size: 16px;
+    }
+    .instal-form .container {
+        margin-top: 20px;
+        border-radius: 20px;
+    }
+    .faq-sec .custom-faq .accordion-item .accordion-header .accordion-button {
+        padding: 20px 30px 20px 65px;
+    }
+    .faq-sec .custom-faq .accordion-item .accordion-header i {
+        height: 24px;
+        width: 24px;
+        font-size: 14px;
+    }
+    .faq-sec .custom-faq .accordion-item .accordion-header .accordion-button::after {
+        width: 28px;
+        height: 28px;
+    }
+    .faq-sec .custom-faq .accordion-item .accordion-collapse .accordion-body {
+        padding: 0 30px 10px 30px;
+    }
+}
+/*=======================================================================================================================================*/

@@ -1,57 +1,153 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SolaSaver - Use More of Your Own Solar Power</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolaSaver | Use More of Your Own Solar Power</title>
+
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        :root {
+            --ss-green: #1faa4d;
+            --ss-green-dark: #178a3f;
+        }
+
+        /* HERO ---------------------------------------------------- */
+        .home-hero {
+            position: relative;
+            min-height: 88vh;
+            display: flex;
+            align-items: center;
+            /* Dark on the left for text legibility, fading to show the photo on the right */
+            background:
+                linear-gradient(90deg, rgba(8, 20, 12, 0.85) 0%, rgba(8, 20, 12, 0.55) 35%, rgba(8, 20, 12, 0.10) 70%, rgba(8, 20, 12, 0) 100%),
+                url("{{ asset('img/bg-image.png') }}") no-repeat center center;
+            background-size: cover;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .home-hero .hero-content {
+            max-width: 640px;
+            padding: 60px 0;
+        }
+
+        .home-hero h1 {
+            font-size: 4rem;
+            line-height: 1.05;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .home-hero h1 .accent {
+            color: var(--ss-green);
+        }
+
+        .home-hero p.lead-text {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #e9eee9;
+            max-width: 560px;
+            margin-bottom: 2.25rem;
+        }
+
+        /* Buttons ------------------------------------------------- */
+        .btn-ss {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 30px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            text-decoration: none;
+            transition: all .2s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-ss-solid {
+            background: var(--ss-green);
+            color: #fff;
+        }
+        .btn-ss-solid:hover {
+            background: var(--ss-green-dark);
+            color: #fff;
+        }
+
+        .btn-ss-outline {
+            border-color: var(--ss-green);
+            color: #fff;
+            background: transparent;
+        }
+        .btn-ss-outline:hover {
+            background: var(--ss-green);
+            color: #fff;
+        }
+
+        .btn-ss i {
+            font-size: .9rem;
+        }
+
+        /* Responsive ---------------------------------------------- */
+        @media (max-width: 991px) {
+            .home-hero {
+                min-height: auto;
+                text-align: center;
+                background:
+                    linear-gradient(rgba(8, 20, 12, 0.7), rgba(8, 20, 12, 0.7)),
+                    url("{{ asset('img/bg-image.png') }}") no-repeat center center;
+                background-size: cover;
+            }
+            .home-hero h1 { font-size: 2.6rem; }
+            .home-hero .hero-content { margin: 0 auto; padding: 90px 0; }
+            .home-hero p.lead-text { margin-left: auto; margin-right: auto; }
+            .hero-buttons { justify-content: center; }
+        }
+
+        @media (max-width: 575px) {
+            .home-hero h1 { font-size: 2.1rem; }
+            .btn-ss { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased">
+<body>
 
-   @include('layouts.public-header')
+    @include('layouts.public-header')
 
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div class="lg:col-span-7 space-y-6">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-none">
-                Use More of Your Own Solar Power <span class="text-emerald-500 block sm:inline">Simply and Affordably</span>
-            </h1>
-            <p class="text-lg text-slate-600 max-w-xl leading-relaxed">
-                SolaSaver is a smart solar diverter that automatically redirects excess solar energy straight into your home systems—helping reduce electricity bills and maximizing the true value of your setup.
-            </p>
-            
-            <div class="flex flex-wrap items-center gap-4 pt-2">
-                <a href="{{ route('shop') }}" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-3.5 rounded-xl transition shadow-md hover:shadow-lg">
-                    How It Works →
-                </a>
-                <a href="{{ route('compatibility') }}" class="bg-transparent hover:bg-slate-100 text-slate-900 border-2 border-slate-900 font-bold px-8 py-3.5 rounded-xl transition">
-                    Check Compatibility →
-                </a>
-            </div>
-        </div>
+    <section class="home-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>
+                    Use More of Your Own Solar
+                    Power <span class="accent">Simply and Affordably</span>
+                </h1>
 
-        <div class="lg:col-span-5 relative flex justify-center">
-            <div class="w-full max-w-md relative">
-                <div class="absolute -inset-4 bg-emerald-100 rounded-3xl transform rotate-3 opacity-70 blur-sm"></div>
-                <div class="relative bg-white border border-slate-200 rounded-2xl p-8 shadow-xl flex flex-col items-center justify-center text-center space-y-4">
-                    <div class="text-6xl">📟</div>
-                    <h3 class="text-xl font-bold text-slate-900">SolaSaver Core Unit</h3>
-                    <p class="text-xs text-slate-400 font-mono tracking-widest uppercase">Smart Diverter Module</p>
-                    <div class="w-full bg-emerald-50 rounded-xl p-3 border border-emerald-100">
-                        <span class="text-xs font-semibold text-emerald-800 uppercase tracking-wider block">Current Optimization Status</span>
-                        <span class="text-2xl font-black text-emerald-600 mt-1 block">100% Diversion</span>
-                    </div>
+                <p class="lead-text">
+                    SolaSaver is a smart solar diverter that automatically uses excess
+                    solar energy within your home, helping reduce electricity bills and
+                    maximise the value of your solar system.
+                </p>
+
+                <div class="hero-buttons d-flex flex-wrap gap-3">
+                    <a href="{{ url('/how-it-works') }}" class="btn-ss btn-ss-solid">
+                        How It Works <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="{{ url('/system-compatibility') }}" class="btn-ss btn-ss-outline">
+                        Check Compatibility <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
+    {{-- Add further home page sections (Why Choose Us, How It Works, etc.) below --}}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

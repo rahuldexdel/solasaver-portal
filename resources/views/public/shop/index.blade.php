@@ -25,7 +25,11 @@
                 <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                     <div>
                         <div class="w-full bg-slate-50 rounded-xl py-12 flex items-center justify-center text-5xl border border-slate-100 mb-4">
-                            📟
+                          @if($product->image)
+                            <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image" width="150"><br><br>
+                        @else
+                            <p>No image uploaded.</p>
+                        @endif
                         </div>
                         <span class="text-[10px] font-mono tracking-widest uppercase bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold">
                             {{ $product->sku ?? 'SOLASAVE1001' }}

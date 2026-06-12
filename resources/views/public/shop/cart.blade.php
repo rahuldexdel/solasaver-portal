@@ -28,7 +28,13 @@
                     @foreach($cart as $id => $item)
                         <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between shadow-sm">
                             <div class="flex items-center gap-4">
-                                <div class="w-16 h-16 bg-slate-100 border border-slate-200 rounded-xl flex items-center justify-center text-2xl">📟</div>
+                                <div class="w-16 h-16 bg-slate-100 border border-slate-200 rounded-xl flex items-center justify-center text-2xl">
+                                      @if($item['image'])
+                                        <img src="{{ asset('storage/' . $item['image']) }}" alt="Product Image" width="150"><br><br>
+                                    @else
+                                        <p>No image uploaded.</p>
+                                    @endif
+                                </div>
                                 <div>
                                     <h3 class="font-bold text-slate-900 capitalize">{{ $item['name'] }}</h3>
                                     <p class="text-xs font-mono text-slate-400 mt-0.5">{{ $item['sku'] ?? 'SOLASAVE1001' }}</p>                                    <p class="text-sm font-semibold text-emerald-600 mt-1">${{ number_format($item['price'], 2) }}</p>

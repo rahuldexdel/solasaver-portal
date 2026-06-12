@@ -36,6 +36,11 @@
                             <input type="text" name="sku" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         </div>
                     </div>
+
+                    <div>
+                        <label>Product Image:</label>
+                        <input type="file" name="image" accept="image/*">
+                    </div>
                     <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100">
                         <a href="{{ route('admin.products.index') }}" class="text-gray-600 hover:text-gray-900 transition text-sm font-medium">Cancel</a>
                         <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition text-sm shadow-sm">Save Product</button>

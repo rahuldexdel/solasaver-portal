@@ -15,4 +15,16 @@ class PublicPageController extends Controller
     {
         return view('public.find-electrician');
     }
+
+    public function whychooseus()
+    {
+        return view('public.why-choose-us');
+    }
+
+    public function faq()
+    {
+        return view('public.faq');
+    }
+
+    
 }
