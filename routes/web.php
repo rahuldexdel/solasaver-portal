@@ -14,7 +14,7 @@ use App\Http\Controllers\PublicPageController;
 
         Route::get('/', function () {
 
-        dd(auth()->check());
+        //dd(auth()->check());
             if (auth()->check()) {
                 if (auth()->user()->hasRole('admin')) {
                     return redirect()->route('admin.dashboard');
