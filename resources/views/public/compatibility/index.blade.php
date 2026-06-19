@@ -8,6 +8,30 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    {{-- Compatibility quiz styles. Move these into css/style.css if you prefer. --}}
+    <style>
+        #compatModal .modal-content { border-radius: 1rem; overflow: hidden; }
+        .compat-progress { height: 4px; background: #e6f4ee; }
+        .compat-progress-bar {
+            height: 100%; width: 33%;
+            background: var(--primary-color, #1d9e75);
+            transition: width .3s ease;
+        }
+        .compat-option {
+            width: 100%;
+            border: 1.5px solid var(--primary-color, #1d9e75);
+            background: #fff;
+            color: var(--primary-color, #1d9e75);
+            font-weight: 500;
+            padding: .85rem 1rem;
+            border-radius: .75rem;
+            transition: background .15s ease, color .15s ease;
+        }
+        .compat-option:hover,
+        .compat-option:focus { background: var(--primary-color, #1d9e75); color: #fff; }
+        .compat-result-icon { width: 64px; height: 64px; }
+    </style>
 </head>
 <body>
 
@@ -42,36 +66,86 @@
                             <li>Whether your home is likely to benefit from solar diversion</li>
                             <li>What the next step is if your home looks suitable</li>
                         </ul>
-                        <a href="#" class="cbtn">Check My Home <i class="fa-solid fa-arrow-right ms-1"></i></a>
+
+                        {{-- TRIGGER: opens the quiz modal --}}
+                        <a href="#" class="cbtn" data-bs-toggle="modal" data-bs-target="#compatModal">
+                            Check My Home <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="suitable-sola bg-white py-5">
-        <div class="container pt-5 my-lg-5">
-            <div class="row align-items-center">
-                <div class="col-12">
-                    <div class="resultbox bg-white">
-                        <div class="innerbox">
-                            <h3 class="fw-bold my-0"> 
-                                <img src="{{ asset('img/check-icon.svg') }}" alt="Check Icon"> Your Home Appears Suitable for <span class="htext">SolaSaver</span>
-                            </h3>
-                            <p class="mt-3 mb-0 fw-medium">This check provides a general indication only. Final compatibility and installation requirements must be confirmed by a licensed electrician.</p>
+    {{-- ============================================================
+         COMPATIBILITY QUIZ MODAL (multi-step)
+         The result screen lives here now (moved from the old
+         standalone "suitable-sola" section).
+    ============================================================ --}}
+    <div class="modal fade" id="compatModal" tabindex="-1" aria-labelledby="compatModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+
+                {{-- Header --}}
+                <div class="bg-color-primary text-white d-flex align-items-center justify-content-between px-4 py-3">
+                    <span class="fw-medium" id="compatModalLabel">Compatibility Check</span>
+                    <div class="d-flex align-items-center gap-3">
+                        <small id="compatStepLabel">Question 1 of 3</small>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+
+                {{-- Progress --}}
+                <div class="compat-progress">
+                    <div class="compat-progress-bar" id="compatBar"></div>
+                </div>
+
+                <div class="modal-body p-4 p-md-5">
+
+                    {{-- Question view --}}
+                    <div id="compatQuestionView">
+                        <p class="fs-5 fw-bold mb-4" id="compatQuestion">Do you have rooftop solar installed?</p>
+                        <div class="row g-3" id="compatOptions">
+                            {{-- option buttons injected by JS --}}
                         </div>
-                        <div class="innerbox2">
+                        <button type="button" class="btn btn-link text-muted text-decoration-none px-0 mt-3 d-none" id="compatBack">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Back
+                        </button>
+                    </div>
+
+                    {{-- Result view --}}
+                    <div id="compatResultView" class="text-center d-none">
+
+                        {{-- Suitable --}}
+                        <div id="compatResultSuitable">
+                            <h3 class="fw-bold my-0">
+                                <img src="{{ asset('img/check-icon.svg') }}" alt="Check Icon" class="compat-result-icon mb-2 d-block mx-auto">
+                                Your Home Appears Suitable for <span class="htext">SolaSaver</span>
+                            </h3>
+                            <p class="mt-3 fw-medium">This check provides a general indication only. Final compatibility and installation requirements must be confirmed by a licensed electrician.</p>
                             <p class="fw-medium">Based on your answers, SolaSaver should work with a setup like yours. A licensed electrician can confirm compatibility and install the unit.</p>
-                            <div class="btn-group d-flex flex-column flex-sm-row gap-3 mt-4">
+                            <div class="d-flex flex-column gap-3 mt-4">
                                 <a href="{{ route('public.find-electrician') }}" class="cbtn">Find a SolaSaver Registered Installer <i class="fa-solid fa-arrow-right ms-1"></i></a>
                                 <a href="#" class="cbtn">Send SolaSaver Info to Your Electrician <i class="fa-solid fa-arrow-right ms-1"></i></a>
                             </div>
                         </div>
+
+                        {{-- Not suitable / let's talk --}}
+                        <div id="compatResultNotSuitable" class="d-none">
+                            <h3 class="fw-bold my-0">Let's Talk About Your <span class="htext">Options</span></h3>
+                            <p class="mt-3 fw-medium">Based on your answers, a few details need a closer look. You may still benefit from SolaSaver, and our team can help you explore the right setup for your home.</p>
+                            <div class="d-flex flex-column gap-3 mt-4">
+                                <a href="{{ route('public.find-electrician') }}" class="cbtn">Talk to a SolaSaver Installer <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-link text-muted text-decoration-none mt-3" id="compatRestart">Start over</button>
                     </div>
+
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <section>
         <footer class="footer">
@@ -133,8 +207,123 @@
                 <p class="m-0 p-md">&copy; 2026 <a href="{{ route('home') }}" class="text-white">SolaSaver</a>. All Rights Reserved.</p>
             </div>
         </section>
-    </section>  
+    </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    {{-- ============================================================
+         COMPATIBILITY QUIZ LOGIC (vanilla JS, no framework)
+    ============================================================ --}}
+    <script>
+    (function () {
+        const modalEl = document.getElementById('compatModal');
+        if (!modalEl) return;
+
+        /* ------------------------------------------------------
+           EDIT YOUR QUESTIONS HERE.
+           Add/remove freely — the counter & progress bar adjust.
+           Each option's `score` feeds the result logic below.
+        ------------------------------------------------------ */
+        const questions = [
+            {
+                text: "Do you have rooftop solar installed?",
+                key: "has_solar",
+                options: [
+                    { label: "Yes", value: "yes", score: 1 },
+                    { label: "No",  value: "no",  score: 0 }
+                ]
+            },
+            {
+                text: "Do you export excess solar during the day?",
+                key: "exports",
+                options: [
+                    { label: "Yes", value: "yes", score: 1 },
+                    { label: "No",  value: "no",  score: 0 }
+                ]
+            },
+            {
+                text: "Do you have suitable loads, like hot water or a pool pump?",
+                key: "loads",
+                options: [
+                    { label: "Yes", value: "yes", score: 1 },
+                    { label: "No",  value: "no",  score: 0 }
+                ]
+            }
+        ];
+
+        /* Result threshold: how many favorable answers count as suitable. */
+        const SUITABLE_THRESHOLD = 2;
+
+        const stepLabel    = document.getElementById('compatStepLabel');
+        const bar          = document.getElementById('compatBar');
+        const questionView = document.getElementById('compatQuestionView');
+        const resultView   = document.getElementById('compatResultView');
+        const questionEl    = document.getElementById('compatQuestion');
+        const optionsEl     = document.getElementById('compatOptions');
+        const backBtn       = document.getElementById('compatBack');
+        const restartBtn    = document.getElementById('compatRestart');
+        const resSuitable   = document.getElementById('compatResultSuitable');
+        const resNotSuitable= document.getElementById('compatResultNotSuitable');
+
+        let index = 0;
+        let answers = {};
+
+        function renderQuestion() {
+            const q = questions[index];
+            questionEl.textContent = q.text;
+            stepLabel.textContent = "Question " + (index + 1) + " of " + questions.length;
+            bar.style.width = ((index + 1) / questions.length * 100) + "%";
+            backBtn.classList.toggle('d-none', index === 0);
+
+            optionsEl.innerHTML = "";
+            q.options.forEach(function (opt) {
+                const col = document.createElement('div');
+                col.className = "col-6";
+                const btn = document.createElement('button');
+                btn.type = "button";
+                btn.className = "compat-option";
+                btn.textContent = opt.label;
+                btn.addEventListener('click', function () {
+                    answers[q.key] = opt.score || 0;
+                    if (index < questions.length - 1) { index++; renderQuestion(); }
+                    else { showResult(); }
+                });
+                col.appendChild(btn);
+                optionsEl.appendChild(col);
+            });
+        }
+
+        function showResult() {
+            const total = Object.values(answers).reduce(function (s, v) { return s + v; }, 0);
+            const suitable = total >= SUITABLE_THRESHOLD;
+
+            questionView.classList.add('d-none');
+            resultView.classList.remove('d-none');
+            stepLabel.textContent = "Result";
+            bar.style.width = "100%";
+
+            resSuitable.classList.toggle('d-none', !suitable);
+            resNotSuitable.classList.toggle('d-none', suitable);
+        }
+
+        function reset() {
+            index = 0;
+            answers = {};
+            resultView.classList.add('d-none');
+            questionView.classList.remove('d-none');
+            renderQuestion();
+        }
+
+        backBtn.addEventListener('click', function () {
+            if (index > 0) { index--; renderQuestion(); }
+        });
+        restartBtn.addEventListener('click', reset);
+
+        // Restart the quiz each time the modal is reopened
+        modalEl.addEventListener('hidden.bs.modal', reset);
+
+        renderQuestion();
+    })();
+    </script>
 </body>
 </html>
