@@ -37,6 +37,14 @@
                     📦 Manage Products
                 </a>
 
+                <a href="{{ route('admin.cms.pages.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all {{ Request::is('admin/cms/pages*') ? 'bg-gray-100 text-gray-900 font-semibold shadow-sm' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                    📦 Manage Pages
+                </a>
+
+                <a href="{{ route('admin.cms.settings.edit') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all {{ Request::is('admin/cms/settings*') ? 'bg-gray-100 text-gray-900 font-semibold shadow-sm' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                    📦 Site Settings
+                </a>
+
                 <a href="{{ route('admin.orders.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all {{ Request::is('admin/orders*') ? 'bg-gray-100 text-gray-900 font-semibold shadow-sm' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     📋 View Orders
                 </a>

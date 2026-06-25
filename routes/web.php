@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Installer;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\PublicPageController;
+use Modules\Cms\Http\Controllers\PageController;
+use Modules\Cms\Http\Controllers\SettingController;
 
         Route::get('/', function () {
 
@@ -29,10 +31,10 @@ use App\Http\Controllers\PublicPageController;
             return view('welcome'); 
         });
         // ─── PUBLIC STOREFRONT ROUTES ─────────────────────────────────────
-        Route::get('/', [HomeController::class, 'index'])->name('home');
+      //
         Route::get('/products', [ShopController::class, 'index'])->name('shop');
         Route::get('/products/{product:slug}', [ShopController::class, 'show'])->name('shop.show');
-        Route::get('/compatibility', [CompatibilityController::class, 'index'])->name('compatibility');
+        Route::get('/compatibility', [CompatibilityController::class, 'compatibility'])->name('compatibility');
         Route::post('/compatibility/check', [CompatibilityController::class, 'check'])->name('compatibility.check');
         Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
@@ -42,6 +44,7 @@ use App\Http\Controllers\PublicPageController;
         Route::patch('/cart/{product}', [CartController::class, 'update'])->name('cart.update');
         Route::delete('/cart/{product}', [CartController::class, 'remove'])->name('cart.remove');
 
+          Route::get('/', [PublicPageController::class, 'home'])->name('home');
         Route::get('/where-to-buy', [PublicPageController::class, 'whereToBuy'])->name('public.where-to-buy');
         Route::get('/find-electrician', [PublicPageController::class, 'findElectrician'])->name('public.find-electrician');
         Route::get('/why-choose-us', [PublicPageController::class, 'whychooseus'])->name('public.why-choose-us');
@@ -107,6 +110,9 @@ use App\Http\Controllers\PublicPageController;
             Route::get('/orders', [Customer\OrderController::class, 'index'])->name('orders.index');
             Route::get('/orders/{order}', [Customer\OrderController::class, 'show'])->name('orders.show');
         });
+
+
+
 
 
 

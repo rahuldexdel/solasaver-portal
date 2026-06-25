@@ -30,7 +30,7 @@
                     </button>
                     <div>
                         @if (isset($header))
-                            {{ $header }}
+                          <div class="flex-1 w-full">{{ $header }}</div>
                         @endif
                     </div>
                 </div>

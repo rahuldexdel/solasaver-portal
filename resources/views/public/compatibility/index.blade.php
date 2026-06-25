@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Compatibility</title>
+    <title>{{ $page->meta_title ?: $page->title }}</title>
+    @if($page->meta_description)<meta name="description" content="{{ $page->meta_description }}">@endif
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -39,54 +40,63 @@
         @include('layouts.public-header')
     </header>
 
+    @php
+        $hero    = $page->section('hero');
+        $checker = $page->section('checker_intro');
+    @endphp
+
+    <!-- Page Hero -->
+    @if($hero && $hero->is_active)
     <section class="page-hero bg-light py-3">
         <div class="container mt-lg-5 pt-lg-5">
-            <h1 class="fw-bold my-0 text-center text-white pt-lg-5 mt-lg-5">System Compatibility</h1>
-            <p class="text-white text-center mt-3 p-xl">A smarter, simpler way to use more of your own solar power without complexity, high costs, or ongoing maintenance.</p>
+            <h1 class="fw-bold my-0 text-center text-white pt-lg-5 mt-lg-5">{!! $hero->formatted_heading !!}</h1>
+            <p class="text-white text-center mt-3 p-xl">{{ $hero->body }}</p>
         </div>
     </section>
+    @endif
 
+    <!-- Compatibility Checker Intro -->
+    @if($checker && $checker->is_active)
     <section class="workhome bg-white py-5">
         <div class="container pt-5 my-lg-5">
             <div class="row align-items-center">
                 <div class="col-lg-5 col-12 img-bol pe-lg-5">
-                    <img src="{{ asset('img/Work home left image.png') }}" class="w-100" alt="hsw-right-img">
+                    <img src="{{ $checker->image_url }}" class="w-100" alt="hsw-right-img">
                 </div>
                 <div class="col-lg-7 col-12 text-col mt-2 mt-md-3 mt-lg-0 ps-lg-3 pt-lg-0 pt-3 order-lg-1 order-2">
                     <div class="pe-lg-5">
-                        <h2 class="fw-bold my-0">Will <span class="htext">SolaSaver</span> Work In My Home?</h2>
+                        <h2 class="fw-bold my-0">{!! $checker->formatted_heading !!}</h2>
                         <div class="notebox my-4 p-4 rounded-4">
-                            <p class="p-xl mb-2 fw-medium">Answer a few simple questions to see if SolaSaver may suit your home.</p>
-                            <p class="p-xl mb-0 fw-medium text-uppercase">No personal details are required.</p>
+                            <p class="p-xl mb-2 fw-medium">{{ $checker->subheading }}</p>
+                            <p class="p-xl mb-0 fw-medium text-uppercase">{{ $checker->body }}</p>
                         </div>
+                        @if($checker->items->isNotEmpty())
                         <ul class="p-xl ps-4 mb-4">
-                            <li>Whether you already have rooftop solar</li>
-                            <li>Whether you export excess solar during the day</li>
-                            <li>Whether you have suitable electrical loads (eg hot water or a pool pump)</li>
-                            <li>Whether your home is likely to benefit from solar diversion</li>
-                            <li>What the next step is if your home looks suitable</li>
+                            @foreach($checker->items as $item)
+                                <li>{{ $item->body }}</li>
+                            @endforeach
                         </ul>
+                        @endif
 
                         {{-- TRIGGER: opens the quiz modal --}}
                         <a href="#" class="cbtn" data-bs-toggle="modal" data-bs-target="#compatModal">
-                            Check My Home <i class="fa-solid fa-arrow-right ms-1"></i>
+                            {{ $checker->button_text ?: 'Check My Home' }} <i class="fa-solid fa-arrow-right ms-1"></i>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    @endif
 
     {{-- ============================================================
-         COMPATIBILITY QUIZ MODAL (multi-step)
-         The result screen lives here now (moved from the old
-         standalone "suitable-sola" section).
+         COMPATIBILITY QUIZ MODAL (multi-step) — this is a FEATURE,
+         not CMS content. Questions/logic live in the JS below.
     ============================================================ --}}
     <div class="modal fade" id="compatModal" tabindex="-1" aria-labelledby="compatModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0">
 
-                {{-- Header --}}
                 <div class="bg-color-primary text-white d-flex align-items-center justify-content-between px-4 py-3">
                     <span class="fw-medium" id="compatModalLabel">Compatibility Check</span>
                     <div class="d-flex align-items-center gap-3">
@@ -95,28 +105,22 @@
                     </div>
                 </div>
 
-                {{-- Progress --}}
                 <div class="compat-progress">
                     <div class="compat-progress-bar" id="compatBar"></div>
                 </div>
 
                 <div class="modal-body p-4 p-md-5">
 
-                    {{-- Question view --}}
                     <div id="compatQuestionView">
                         <p class="fs-5 fw-bold mb-4" id="compatQuestion">Do you have rooftop solar installed?</p>
-                        <div class="row g-3" id="compatOptions">
-                            {{-- option buttons injected by JS --}}
-                        </div>
+                        <div class="row g-3" id="compatOptions"></div>
                         <button type="button" class="btn btn-link text-muted text-decoration-none px-0 mt-3 d-none" id="compatBack">
                             <i class="fa-solid fa-arrow-left me-1"></i> Back
                         </button>
                     </div>
 
-                    {{-- Result view --}}
                     <div id="compatResultView" class="text-center d-none">
 
-                        {{-- Suitable --}}
                         <div id="compatResultSuitable">
                             <h3 class="fw-bold my-0">
                                 <img src="{{ asset('img/check-icon.svg') }}" alt="Check Icon" class="compat-result-icon mb-2 d-block mx-auto">
@@ -130,7 +134,6 @@
                             </div>
                         </div>
 
-                        {{-- Not suitable / let's talk --}}
                         <div id="compatResultNotSuitable" class="d-none">
                             <h3 class="fw-bold my-0">Let's Talk About Your <span class="htext">Options</span></h3>
                             <p class="mt-3 fw-medium">Based on your answers, a few details need a closer look. You may still benefit from SolaSaver, and our team can help you explore the right setup for your home.</p>
@@ -147,6 +150,7 @@
         </div>
     </div>
 
+    <!-- Footer & Copyright -->
     <section>
         <footer class="footer">
             <div class="container py-4">
@@ -155,8 +159,8 @@
                         <h5 class="fw-medium secondary-color">Contact Us</h5>
                         <hr style="opacity: 1; background-color: var(--secondary-color); width: 40px;">
                         <ul class="list-unstyled m-0 p-0">
-                            <li><p><a href="tel:+012482482481"> <i class="fa-solid fa-phone me-2 primary-color"></i>+01 248 248 2481</a></p></li>
-                            <li><p><a href="mailto:sales@solasaver.com"> <i class="fa-solid fa-envelope me-2 primary-color"></i>sales@solasaver.com</a></p></li>
+                            <li><p><a href="tel:{{ setting('contact_phone') }}"> <i class="fa-solid fa-phone me-2 primary-color"></i>{{ setting('contact_phone') }}</a></p></li>
+                            <li><p><a href="mailto:{{ setting('contact_email') }}"> <i class="fa-solid fa-envelope me-2 primary-color"></i>{{ setting('contact_email') }}</a></p></li>
                         </ul>
                     </div>
                     <div class="col-lg-4 col-md-4 col-12 d-flex justify-content-center align-items-center order-1 order-md-2">
@@ -192,10 +196,10 @@
                 <div class="row position-relative mt-5">
                     <div class="col-12">
                         <div class="socialbox width-fit-content mx-auto">
-                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-youtube"></i></a>
+                            <a href="{{ setting('facebook_url') }}" target="_blank" class="sociallink"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="{{ setting('linkedin_url') }}" target="_blank" class="sociallink"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <a href="{{ setting('instagram_url') }}" target="_blank" class="sociallink"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="{{ setting('youtube_url') }}" target="_blank" class="sociallink"><i class="fa-brands fa-youtube"></i></a>
                         </div>
                     </div>
                 </div>
@@ -204,7 +208,7 @@
 
         <section class="copyright bg-color-primary text-white text-center py-2">
             <div class="container">
-                <p class="m-0 p-md">&copy; 2026 <a href="{{ route('home') }}" class="text-white">SolaSaver</a>. All Rights Reserved.</p>
+                <p class="m-0 p-md">&copy; {{ date('Y') }} <a href="{{ route('home') }}" class="text-white">SolaSaver</a>. All Rights Reserved.</p>
             </div>
         </section>
     </section>
@@ -213,17 +217,13 @@
 
     {{-- ============================================================
          COMPATIBILITY QUIZ LOGIC (vanilla JS, no framework)
+         Edit questions here — counter & progress bar auto-adjust.
     ============================================================ --}}
     <script>
     (function () {
         const modalEl = document.getElementById('compatModal');
         if (!modalEl) return;
 
-        /* ------------------------------------------------------
-           EDIT YOUR QUESTIONS HERE.
-           Add/remove freely — the counter & progress bar adjust.
-           Each option's `score` feeds the result logic below.
-        ------------------------------------------------------ */
         const questions = [
             {
                 text: "Do you have rooftop solar installed?",
@@ -251,7 +251,6 @@
             }
         ];
 
-        /* Result threshold: how many favorable answers count as suitable. */
         const SUITABLE_THRESHOLD = 2;
 
         const stepLabel    = document.getElementById('compatStepLabel');
@@ -318,8 +317,6 @@
             if (index > 0) { index--; renderQuestion(); }
         });
         restartBtn.addEventListener('click', reset);
-
-        // Restart the quiz each time the modal is reopened
         modalEl.addEventListener('hidden.bs.modal', reset);
 
         renderQuestion();

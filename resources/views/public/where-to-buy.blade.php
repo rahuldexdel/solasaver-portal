@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Where to Buy SolaSaver</title>
+    <title>{{ $page->meta_title ?: $page->title }}</title>
+    @if($page->meta_description)<meta name="description" content="{{ $page->meta_description }}">@endif
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,33 +16,40 @@
         @include('layouts.public-header')
     </header>
 
+    @php
+        $hero = $page->section('hero');
+        $buy  = $page->section('buy_options');
+    @endphp
+
+    <!-- Page Hero -->
+    @if($hero && $hero->is_active)
     <section class="page-hero bg-light py-3">
         <div class="container mt-lg-5 pt-lg-5">
-            <h1 class="fw-bold my-0 text-center text-white pt-lg-5 mt-lg-5">Where to Buy SolaSaver</h1>
+            <h1 class="fw-bold my-0 text-center text-white pt-lg-5 mt-lg-5">{!! $hero->formatted_heading !!}</h1>
         </div>
     </section>
+    @endif
 
+    <!-- Buy Options -->
+    @if($buy && $buy->is_active)
     <section class="buy-solar bg-white py-5">
         <div class="container pt-5 my-lg-5">
             <div class="row align-items-center">
-                <div class="col-md-6 col-12 pe-lg-5 pe-md-4">
+                @foreach($buy->items as $item)
+                <div class="col-md-6 col-12 {{ $loop->first ? 'pe-lg-5 pe-md-4' : 'ps-lg-5 ps-md-4 mt-5 mt-md-0' }}">
                     <div class="imgbox text-center">
-                        <img src="{{ asset('img/Find an Electrician.jpg') }}" class="w-100" alt="Find an Electrician">
-                        <a href="{{ route('public.find-electrician') }}" class="cbtn hover-background-white mx-auto z-1 position-relative d-table" style="margin-top: -28px">Find an Electrician Near You <i class="fa-solid fa-arrow-right ms-1"></i></a>
-                        <p class="p-xl fw-medium mb-0 mt-4 mx-5 px-3 secondary-color">Search for independent licensed electricians in your area who can supply and install SolaSaver.</p>
+                        <img src="{{ $item->image_url }}" class="w-100" alt="{{ $item->link_text }}">
+                        <a href="{{ $item->link_url }}" class="cbtn hover-background-white mx-auto z-1 position-relative d-table" style="margin-top: -28px">{{ $item->link_text }} <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        <p class="p-xl fw-medium mb-0 mt-4 mx-5 px-3 secondary-color">{{ $item->body }}</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-12 ps-lg-5 ps-md-4 mt-5 mt-md-0">
-                    <div class="imgbox text-center">
-                        <img src="{{ asset('img/order-solasaver.jpg') }}" class="w-100" alt="Order SolaSaver">
-                        <a href="#" class="cbtn hover-background-white mx-auto z-1 position-relative d-table" style="margin-top: -28px">Order SolaSaver <i class="fa-solid fa-arrow-right ms-1"></i></a>
-                        <p class="p-xl fw-medium mb-0 mt-4 mx-5 px-3 secondary-color">Order SolaSaver directly from us and have your electrician install it.</p>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
+    @endif
 
+    <!-- Footer & Copyright -->
     <section>
         <footer class="footer">
             <div class="container py-4">
@@ -50,8 +58,8 @@
                         <h5 class="fw-medium secondary-color">Contact Us</h5>
                         <hr style="opacity: 1; background-color: var(--secondary-color); width: 40px;">
                         <ul class="list-unstyled m-0 p-0">
-                            <li><p><a href="tel:+012482482481"> <i class="fa-solid fa-phone me-2 primary-color"></i>+01 248 248 2481</a></p></li>
-                            <li><p><a href="mailto:sales@solasaver.com"> <i class="fa-solid fa-envelope me-2 primary-color"></i>sales@solasaver.com</a></p></li>
+                            <li><p><a href="tel:{{ setting('contact_phone') }}"> <i class="fa-solid fa-phone me-2 primary-color"></i>{{ setting('contact_phone') }}</a></p></li>
+                            <li><p><a href="mailto:{{ setting('contact_email') }}"> <i class="fa-solid fa-envelope me-2 primary-color"></i>{{ setting('contact_email') }}</a></p></li>
                         </ul>
                     </div>
                     <div class="col-lg-4 col-md-4 col-12 d-flex justify-content-center align-items-center order-1 order-md-2">
@@ -87,10 +95,10 @@
                 <div class="row position-relative mt-5">
                     <div class="col-12">
                         <div class="socialbox width-fit-content mx-auto">
-                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#" target="_blank" class="sociallink"><i class="fa-brands fa-youtube"></i></a>
+                            <a href="{{ setting('facebook_url') }}" target="_blank" class="sociallink"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="{{ setting('linkedin_url') }}" target="_blank" class="sociallink"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <a href="{{ setting('instagram_url') }}" target="_blank" class="sociallink"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="{{ setting('youtube_url') }}" target="_blank" class="sociallink"><i class="fa-brands fa-youtube"></i></a>
                         </div>
                     </div>
                 </div>
@@ -99,7 +107,7 @@
 
         <section class="copyright bg-color-primary text-white text-center py-2">
             <div class="container">
-                <p class="m-0 p-md">&copy; 2026 <a href="{{ route('home') }}" class="text-white">SolaSaver</a>. All Rights Reserved.</p>
+                <p class="m-0 p-md">&copy; {{ date('Y') }} <a href="{{ route('home') }}" class="text-white">SolaSaver</a>. All Rights Reserved.</p>
             </div>
         </section>
     </section>

@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Modules\Cms\Models\Page;
 
 class CompatibilityController extends Controller
 {
-    public function index()
+
+    public function compatibility()
     {
-        return view('public.compatibility.index');
+        $page = Page::with('sections.items')->where('slug', 'system-compatibility')->firstOrFail();
+        return view('public.compatibility.index', compact('page'));   // your actual view path
     }
 
     public function check(Request $request)
