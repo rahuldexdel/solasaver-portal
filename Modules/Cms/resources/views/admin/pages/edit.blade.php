@@ -119,7 +119,7 @@
                     <input type="text" name="sections[{{ $section->id }}][subheading]" value="{{ $section->subheading }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
 
                     <label class="block text-xs font-semibold text-gray-500 mb-1">Body text</label>
-                    <textarea name="sections[{{ $section->id }}][body]" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">{{ $section->body }}</textarea>
+                    <textarea name="sections[{{ $section->id }}][body]" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none resize-none">{{ $section->body }}</textarea>
 
                     <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Buttons <span class="normal-case font-normal">(leave blank to hide)</span></p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
@@ -163,7 +163,7 @@
                         @forelse($section->items as $item)
                             @include('cms::admin.pages._item', ['item' => $item])
                         @empty
-                            <p class="text-xs text-gray-400 italic">No items yet. Click “+ Add item” to create one (icon boxes, cards, list points, etc.).</p>
+                            <p class="text-xs text-gray-400 italic">No items yet. Click "+ Add item" to create one (icon boxes, cards, list points, etc.).</p>
                         @endforelse
                     </div>
                 </div>
