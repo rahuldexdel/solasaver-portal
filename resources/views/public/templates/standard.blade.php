@@ -1,4 +1,4 @@
-<h1>standard page  </h1>@extends('layouts.public')
+@extends('layouts.public')
 
 @section('content')
 

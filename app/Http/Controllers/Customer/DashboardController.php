@@ -12,15 +12,17 @@ class DashboardController extends Controller
     {
         $userId = auth()->id();
 
-        // Fetch recent orders for reference tracking
-        $recentOrders = Order::where('user_id', $userId)->latest()->take(5)->get();
+        // Recent orders (3 is enough for the dashboard panel)
+        $recentOrders = Order::where('user_id', $userId)->latest()->take(3)->get();
 
-        // Fix: Build the missing stats matrix using real database metrics
         $stats = [
             'orders_count' => Order::where('user_id', $userId)->count(),
             'pending_installations' => Installation::where('customer_id', $userId)
                 ->whereIn('status', ['pending', 'assigned', 'scheduled'])
-                ->count()
+                ->count(),
+            'unpaid_count' => Order::where('user_id', $userId)
+                ->where('payment_status', 'unpaid')
+                ->count(),
         ];
 
         return view('customer.dashboard', compact('recentOrders', 'stats'));

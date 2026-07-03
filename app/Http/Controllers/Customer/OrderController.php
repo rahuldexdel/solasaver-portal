@@ -8,10 +8,12 @@ use App\Models\Order;
 
 class OrderController extends Controller
 {
-public function index()
+    public function index()
     {
-        // Fetch only the authenticated user's individual orders
-        $orders = auth()->user()->orders()->orderBy('created_at', 'desc')->get();
+        $orders = auth()->user()->orders()
+            ->withCount('items')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('customer.orders.index', compact('orders'));
     }
